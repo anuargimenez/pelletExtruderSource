@@ -1,0 +1,68 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 350; //initial condition
+
+boundaryField
+{   
+    
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 298.15; // temperature ambient 25ºC 
+    }
+    
+    outlet
+    {
+        type            zeroGradient;
+    }
+    
+   "barrelup.*"
+    {
+	type            	convectiveRadiativeHeatFlux;
+	mode            	convectiveRadiative;
+	Ta              	constant 513.15;
+	h               	uniform 215;			//Heat transfer coefficient    [W/(m²*K)]
+	emissivityNozzle	0.95;				//Emissivity nozzle (or brass) [-]
+	emissivityFilament	0.95;				//Emissivity filament [-]
+	dNozzle		4.0;				//inner diameter nozzle [mm}
+	dFilament		1.75;				//filament diameter [mm]
+        kappaMethod     	fluidThermo;
+        value           	$internalField;		//initial Temperature value
+    }
+      
+    "barreldown.*"
+    {
+        type            fixedValue;
+        value           uniform 513.15; // solo calor en la zona 2
+    }
+    
+    "screwup.*"
+    {
+        type            zeroGradient;
+    }    
+    
+    "screwdown.*"
+    {
+        type            zeroGradient;
+    }
+
+}
+
+
+// ************************************************************************* //

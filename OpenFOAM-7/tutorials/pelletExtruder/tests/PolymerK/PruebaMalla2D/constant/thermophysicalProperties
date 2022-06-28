@@ -1,0 +1,53 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Temperature dependnt K, H and Cp constant, rho constant. 
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       polymerK;
+    thermo          hConst;
+    equationOfState rhoConst;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+	nMoles	    1;	//irrelevant
+	molWeight   1;	//Value necessary but irrelevant for the calculation as there is no mixture
+    }
+    thermodynamics
+    {
+        Cp          1007;
+        Hf          0; //Heat of Fusion, irrelevant as there is no mixture
+    }
+    transport
+    {
+        mu          1.4792e-02;
+        Pr          116;
+    }
+     
+    equationOfState
+    {
+        rho        1000;
+    }
+}
+
+// ************************************************************************* //

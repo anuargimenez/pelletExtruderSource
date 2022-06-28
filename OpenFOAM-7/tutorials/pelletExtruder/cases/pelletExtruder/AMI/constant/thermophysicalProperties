@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Temperature dependnt K, H and Cp constant, rho constant. 
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       polymerKWLF;
+    thermo          hPolymer;
+    equationOfState rhoPolymerEOS;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+	nMoles	    1;	//irrelevant
+	molWeight   1;	//Value necessary but irrelevant for the calculation as there is no mixture
+    }
+    
+    thermodynamics
+    {
+        Cp          0; //Not needed. Cp(T) tabulated.
+        Hf          0; //Heat of Fusion, irrelevant as there is no mixture
+    }
+    
+    transport
+    {
+        mu0         6115.41096;	//Zero Viscosity		[Pas]
+        Tr          493.15;		//Tref 	[K]
+        C1          9.05296;		//WLF-coefficient	A1
+        C2          185.17494 ;	//WLF-coefficient	A2
+        Tm          374.15;		//Melting Temperature Karrenberg MF	[K]
+        TS          0.8;		//MF coefficient
+        MS          1.0;		//MF coefficient
+    }
+     
+    equationOfState
+    {		
+        b1m         0.0009978;
+        b2m         7.5078e-7;
+        b3m         6.9934e8;
+        b4m         0.0029;
+        b1s         0.0009978;
+        b2s         3.3782e-7;
+        b3s         9.9809e8;
+        b4s         0.00012152;
+        b5          362.15;			
+        b6          1e-7;
+    }
+}
+
+// ************************************************************************* //

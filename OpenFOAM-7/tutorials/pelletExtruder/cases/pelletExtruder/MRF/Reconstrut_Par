@@ -1,0 +1,56 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+reconstructPar
+pyFoamRedoPlot.py --pickle-file Gnuplotting.analyzed/pickledPlots
+pyFoamRedoPlot.py --csv-files --pickle-file Gnuplotting.analyzed/pickledPlots
+
+#Preparing to convert forces to CSV
+sed -e '1,3d' <postProcessing/forcesRotor/0/forces.dat > postProcessing/forcesRotor/0/forces.tmp
+sed 's|[(),]||g' < postProcessing/forcesRotor/0/forces.tmp  > postProcessing/forcesRotor/0/forces2.tmp
+
+#Preparing to convert barrel shear stress to CSV
+sed -e '1,2d' <postProcessing/barrelShearStress/0/wallShearStress.dat > postProcessing/barrelShearStress/0/wallShearStress.tmp
+sed 's|[(),]||g' < postProcessing/barrelShearStress/0/wallShearStress.tmp  > postProcessing/barrelShearStress/0/wallShearStress2.tmp
+
+#Preparing to convert screw shear stress to CSV
+sed -e '1,2d' <postProcessing/screwShearStress/0/wallShearStress.dat > postProcessing/screwShearStress/0/wallShearStress.tmp
+sed 's|[(),]||g' < postProcessing/screwShearStress/0/wallShearStress.tmp  > postProcessing/screwShearStress/0/wallShearStress2.tmp
+
+#Preparing to convert delta_p to CSV
+sed -e '1,4d' <postProcessing/delta_p/0/fieldValueDelta.dat > postProcessing/delta_p/0/fieldValueDelta.tmp
+
+#Preparing to convert delta_p.region1 to CSV
+sed -e '1,4d' <postProcessing/delta_p.region1/0/surfaceFieldValue.dat > postProcessing/delta_p.region1/0/surfaceFieldValue.tmp
+
+#Preparing to convert delta_p.region2 to CSV
+sed -e '1,4d' <postProcessing/delta_p.region2/0/surfaceFieldValue.dat > postProcessing/delta_p.region2/0/surfaceFieldValue.tmp
+
+#Preparing to convert massFlowRateInlet to CSV
+sed -e '1,4d' <postProcessing/massFlowRateInlet/0/surfaceFieldValue.dat > postProcessing/massFlowRateInlet/0/surfaceFieldValue.tmp
+
+#Preparing to convert massFlowRateOutlet to CSV
+sed -e '1,4d' <postProcessing/massFlowRateOutlet/0/surfaceFieldValue.dat > postProcessing/massFlowRateOutlet/0/surfaceFieldValue.tmp
+
+#Preparing to convert minMax to CSV
+sed -e '1,4d' <postProcessing/minMax/0/volFieldValue.dat > postProcessing/minMax/0/volFieldValue.tmp
+
+#Preparing to convert wallHeatFlux to CSV
+sed -e '1,2d' <postProcessing/wallHeatFlux/0/wallHeatFlux.dat > postProcessing/wallHeatFlux/0/wallHeatFlux.tmp
+
+#Script to convert .dat to .csv
+python postProcessing.py
+#delete .tmp files
+rm -rf postProcessing/forcesRotor/0/forces*.tmp
+rm -rf postProcessing/barrelShearStress/0/wallShearStress*.tmp
+rm -rf postProcessing/screwShearStress/0/wallShearStress*.tmp
+rm -rf postProcessing/delta_p/0/fieldValueDelta*.tmp
+rm -rf postProcessing/delta_p.region1/0/surfaceFieldValue*.tmp
+rm -rf postProcessing/delta_p.region2/0/surfaceFieldValue*.tmp
+rm -rf postProcessing/massFlowRateInlet/0/surfaceFieldValue*.tmp
+rm -rf postProcessing/massFlowRateOutlet/0/surfaceFieldValue*.tmp
+rm -rf postProcessing/minMax/0/volFieldValue*.tmp
+rm -rf postProcessing/wallHeatFlux/0/wallHeatFlux*.tmp
+
+echo "Done!"
+#------------------------------------------------------------------------------
