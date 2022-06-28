@@ -53,12 +53,69 @@ License
 #include "heRhoThermo.H"
 #include "pureMixture.H"
 
+#include "polymerKTransport.H"
+#include "polymerKWLFTransport.H"
+#include "rhoPolymerEOS.H"
+#include "hPolymerThermo.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 
 /* * * * * * * * * * * * * * * private static data * * * * * * * * * * * * * */
+// * * * * * * * * * * * * * OWN COMBINATIONS * * * * * * * * * * * * * * //
+
+makeThermos
+(
+    rhoThermo,
+    heRhoThermo,
+    pureMixture,
+    polymerKTransport,
+    sensibleEnthalpy,
+    hConstThermo,
+    rhoConst,
+    specie
+);
+
+makeThermos
+(
+    rhoThermo,
+    heRhoThermo,
+    pureMixture,
+    polymerKTransport,
+    sensibleEnthalpy,
+    hPolymerThermo,
+    rhoConst,
+    specie
+);
+
+makeThermos
+(
+    rhoThermo,
+    heRhoThermo,
+    pureMixture,
+    polymerKTransport,
+    sensibleEnthalpy,
+    hPolymerThermo,
+    rhoPolymerEOS,
+    specie
+);
+
+makeThermos
+(
+    rhoThermo,
+    heRhoThermo,
+    pureMixture,
+    polymerKWLFTransport,
+    sensibleEnthalpy,
+    hPolymerThermo,
+    rhoPolymerEOS,
+    specie
+);
+
+
+// * * * * * * * * * * * * * OPENFOAM PRESET * * * * * * * * * * * * * * //
 
 makeThermos
 (
